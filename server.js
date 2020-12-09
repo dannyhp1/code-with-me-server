@@ -4,16 +4,17 @@ const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8181;
 
 app.use(cors());
 
 app.get('/', function (req, res) {
-   res.send('Hello world!');
+    console.log('Default page accessed.')
+    res.send('Hello world!');
 });
 
 app.get('/ping', function (req, res) {
-   res.send('pong');
+    res.send('pong');
 });
 
 http.listen(port, () => {
