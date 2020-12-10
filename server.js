@@ -17,13 +17,17 @@ app.get('/ping', function (req, res) {
     res.send('healthy');
 });
 
-app.get('/test-execute', function (req, res) {
+app.get('/execute', function (req, res) {
+    // Todo: This code goes into a socket channel (do not keep as endpoint).
+    res.send({'error_message': 'service currently not available'})
+    return
+
     axios.post('http://127.0.0.1:8282/execute', {
         code: 'print("Hello world")'
     }).then(response => {
         res.send(response.data);
     }).catch(error => {
-        res.send({'success': false});
+        res.send({});
     });
 });
 
