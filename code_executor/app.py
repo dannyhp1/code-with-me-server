@@ -21,7 +21,6 @@ def ping():
 def execute():
     data = request.get_json()
     code = data['code']
-
     std_output, err_output = executor.execute_code(code)
 
     return jsonify({
