@@ -14,12 +14,21 @@ app.get('/', function (req, res) {
 });
 
 app.get('/ping', function (req, res) {
-    res.send('healthy');
+    res.send({'status': 'healthy', 'service': 'code-with-me'});
+});
+
+app.get('/execute/ping', function (req, res) {
+    axios.get('http://127.0.0.1:8282/ping')
+        .then(response => {
+            res.send(response.data);
+        }).catch(error => {
+            res.send({'status': 'unavailable', 'service': 'code-with-me-executor'});
+        });
 });
 
 app.get('/execute', function (req, res) {
     // Todo: This code goes into a socket channel (do not keep as endpoint).
-    res.send({'error_message': 'service currently not available'})
+    res.send({'error_message': 'service currently not available'});
     return
 
     axios.post('http://127.0.0.1:8282/v1/execute', {

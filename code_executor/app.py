@@ -12,7 +12,7 @@ def hello():
 @app.route('/ping')
 def ping():
     print('Pinging the host!')
-    return 'healthy'
+    return jsonify({'status': 'healthy', 'service': 'code-with-me-executor'})
 
 @app.route('/v1/execute', methods = ['POST'])
 def execute_v1():
