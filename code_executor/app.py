@@ -10,6 +10,7 @@ def hello():
 
 @app.route('/ping')
 def ping():
+    print('Pinging the host!')
     return 'healthy'
 
 @app.route('/execute', methods = ['POST'])
