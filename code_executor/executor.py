@@ -44,5 +44,4 @@ def make_directory(directory):
         print('Temporary directory [%s] created.' % directory)
     except OSError:
         print('Temporary directory [%s] exists.' % directory)
-
-execute_code("print('Hello world')")
+        
