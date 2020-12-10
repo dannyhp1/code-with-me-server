@@ -14,8 +14,8 @@ def ping():
     print('Pinging the host!')
     return 'healthy'
 
-@app.route('/execute', methods = ['POST'])
-def execute():
+@app.route('/v1/execute', methods = ['POST'])
+def execute_v1():
     data = request.get_json()
     code = data['code']
     std_output, err_output = executor.execute_code(code)
