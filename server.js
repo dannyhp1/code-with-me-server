@@ -22,7 +22,7 @@ app.get('/execute', function (req, res) {
     res.send({'error_message': 'service currently not available'})
     return
 
-    axios.post('http://127.0.0.1:8282/execute', {
+    axios.post('http://127.0.0.1:8282/v1/execute', {
         code: 'print("Hello world")'
     }).then(response => {
         res.send(response.data);
