@@ -1,0 +1,11 @@
+[Unit]
+Description=Code with Me Service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/workspace/code-with-me-server/code_executor
+ExecStart=/usr/bin/gunicorn3 --workers 3 --bind 0.0.0.0:8282 app:app
+
+# Place this file in /etc/systemd/system/gunicorn.service
