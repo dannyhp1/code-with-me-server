@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
+const axios = require('axios');
 
 const port = process.env.PORT || 8181;
 
@@ -14,6 +15,16 @@ app.get('/', function (req, res) {
 
 app.get('/ping', function (req, res) {
     res.send('healthy');
+});
+
+app.get('/test-execute', function (req, res) {
+    axios.post('http://127.0.0.1:8282/execute', {
+        code: 'print("Hello world")'
+    }).then(response => {
+        res.send(response.data);
+    }).catch(error => {
+        res.send({'success': false});
+    });
 });
 
 http.listen(port, () => {
