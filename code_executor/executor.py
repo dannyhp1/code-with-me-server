@@ -25,6 +25,8 @@ def execute_code(code):
     # Cleanup and delete directory.
     shutil.rmtree(source_file_host_directory)
 
+    return std_output, err_output
+
 def run_process(execute_command):
     # Create a process to execute the python file.
     process = subprocess.Popen(execute_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
