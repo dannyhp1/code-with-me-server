@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -14,8 +14,11 @@ def ping():
     return 'healthy'
 
 @app.route('/execute', methods = ['POST'])
-def execute(code):
-    print(code)
+def execute():
+    data = request.get_json()
+    code = data['code']
+
+    print(data)
     return 'Executing your code.'
 
 if __name__ == '__main__':
