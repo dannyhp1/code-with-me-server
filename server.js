@@ -9,12 +9,11 @@ const port = process.env.PORT || 8181;
 app.use(cors());
 
 app.get('/', function (req, res) {
-    console.log('Default page accessed.')
     res.send('Hello world!');
 });
 
 app.get('/ping', function (req, res) {
-    res.send('pong');
+    res.send('healthy');
 });
 
 http.listen(port, () => {
