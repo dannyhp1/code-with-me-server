@@ -33,11 +33,11 @@ app.get('/execute/ping', function (req, res) {
 
 app.post('/execute', function (req, res) {
     // Todo: This code goes into a socket channel (do not keep as endpoint).
-    res.send({'success': false, 'error_message': 'the monkey is currently sleeping, no code can be executed right now'});
-    return
+    // res.send({'success': false, 'error_message': 'The monkey is currently sleeping... no code can be executed right now'.});
+    // return
 
     if (req.body.code === undefined || req.body.code === '') {
-        res.send({ 'success': false })
+        res.send({ 'success': false, 'error_message': 'No code was provided... our monkey has nothing to work with...' });
     }
 
     axios.post('http://127.0.0.1:8282/v1/execute', {
@@ -45,7 +45,7 @@ app.post('/execute', function (req, res) {
     }).then(response => {
         res.send(response.data);
     }).catch(error => {
-        res.send({});
+        res.send({ 'success': false, 'error_message': 'The monkey factory is currently onf ire. No code is being executed properly.' });
     });
 });
 
@@ -76,6 +76,22 @@ io.on('connection', (socket) => {
         // Send code changes to specific room.
         const editorId = data.editorId;
         socket.broadcast.emit('code_change', { code: data.code, editorId: editorId, roomId: roomId });
+    });
+
+    socket.on('execute_code', (data) => {
+        const editorId = data.editorId;
+
+        if (data.code === undefined || data.code === '') {
+            io.emit('execute_code', { roomId: roomId, userId: userId, editorId: editorId, 'success': false, 'error_message': 'No code was provided... our monkey has nothing to work with...' });
+        }
+    
+        axios.post('http://127.0.0.1:8282/v1/execute', {
+            code: data.code
+        }).then(response => {
+            io.emit('execute_code', { ...response.data, roomId: roomId, userId: userId, editorId: editorId });
+        }).catch(error => {
+            io.emit('execute_code', { roomId: roomId, userId: userId, editorId: editorId, 'success': false, 'error_message': 'The monkey factory is currently onf ire. No code is being executed properly.' });
+        });
     });
 
     socket.on('disconnect', () => {
