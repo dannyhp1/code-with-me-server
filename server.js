@@ -33,7 +33,7 @@ app.get('/execute/ping', function (req, res) {
 
 app.post('/execute', function (req, res) {
     // Todo: This code goes into a socket channel (do not keep as endpoint).
-    res.send({'success': false, 'error_message': 'service currently not available'});
+    res.send({'success': false, 'error_message': 'the monkey is currently sleeping, no code can be executed right now'});
     return
 
     if (req.body.code === undefined || req.body.code === '') {
