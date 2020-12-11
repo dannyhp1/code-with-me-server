@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
         }).then(response => {
             io.emit('execute_code', { ...response.data, roomId: roomId, userId: userId, editorId: editorId });
         }).catch(error => {
-            io.emit('execute_code', { roomId: roomId, userId: userId, editorId: editorId, 'success': false, 'error_message': 'The monkey factory is currently onf ire. No code is being executed properly.' });
+            io.emit('execute_code', { roomId: roomId, userId: userId, editorId: editorId, 'success': false, 'error_message': 'The monkey factory is currently on fire. No code is being executed properly.' });
         });
     });
 
