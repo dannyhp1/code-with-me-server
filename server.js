@@ -3,11 +3,13 @@ const path = require('path');
 const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const port = process.env.PORT || 8181;
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
     res.send('Hello world!');
@@ -26,13 +28,17 @@ app.get('/execute/ping', function (req, res) {
         });
 });
 
-app.get('/execute', function (req, res) {
+app.post('/execute', function (req, res) {
     // Todo: This code goes into a socket channel (do not keep as endpoint).
-    res.send({'error_message': 'service currently not available'});
+    res.send({'success': false, 'error_message': 'service currently not available'});
     return
 
+    if (req.body.code === undefined || req.body.code === '') {
+        res.send({ 'success': false })
+    }
+
     axios.post('http://127.0.0.1:8282/v1/execute', {
-        code: 'print("Hello world")'
+        code: req.body.code
     }).then(response => {
         res.send(response.data);
     }).catch(error => {
