@@ -55,8 +55,7 @@ http.listen(port, () => {
 
 const io = require('socket.io')(http);
 io.on('connection', (socket) => {
-    let roomId;
-    let userId;
+    let roomId, userId;
     socket.emit('connected', {});
 
     socket.on('message', (message) => {
@@ -67,18 +66,16 @@ io.on('connection', (socket) => {
     socket.on('room', (data) => {
         roomId = data.roomId;
         userId = data.userId;
-        socket.join(roomId);
 
         addToRoom(roomId, userId);
-
         const length = roomId === 1 ? room1.length : room2.length;
-        io.to(roomId).emit('user_connected', { total_users: length });
+        io.emit('user_connected', { roomId: roomId, total_users: length });
     });
 
     socket.on('code_change', (data) => {
         // Send code changes to specific room.
         const editorId = data.editorId;
-        io.to(roomId).emit('code_change', { code: data.code, editorId: editorId });
+        socket.broadcast.emit('code_change', { code: data.code, editorId: editorId, roomId: roomId });
     });
 
     socket.on('disconnect', () => {
@@ -86,7 +83,7 @@ io.on('connection', (socket) => {
         removeFromRoom(roomId, userId);
 
         const length = roomId === 1 ? room1.length : room2.length;
-        io.to(roomId).emit('user_connected', { total_users: length });
+        io.emit('user_connected', { roomId: roomId, total_users: length });
     });
 });
 
