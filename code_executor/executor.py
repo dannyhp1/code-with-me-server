@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess 
 import shutil
 import uuid
@@ -35,6 +36,12 @@ def run_process(execute_command):
         std_output, err_output = process.communicate(timeout=1000)
     except subprocess.TimeoutExpired:
         print('Timed out.')
+
+    std_output = std_output.decode('utf-8') if std_output is not None else ''
+    err_output.decode('utf-8') if err_output is not None else ''
+
+    if std_output is not None:
+        std_output = re.sub(r"\".*\"", "\"/location/space/users/monkey/main.py\"", std_output)
 
     return std_output, err_output
 

@@ -22,8 +22,8 @@ def execute_v1():
 
     return jsonify({
         'success': True if std_output is not None else False,
-        'std_output': std_output.decode('utf-8') if std_output is not None else '',
-        'err_output': err_output.decode('utf-8') if err_output is not None else ''
+        'std_output': std_output,
+        'err_output': err_output
     })
 
 if __name__ == '__main__':
