@@ -82,6 +82,7 @@ io.on('connection', (socket) => {
 
     socket.on('execute_code', (data) => {
         // Execute code and send results to everyone.
+        console.log('Calling to execute code...');
         const editorId = data.editorId;
 
         if (data.code === undefined || data.code === '') {
