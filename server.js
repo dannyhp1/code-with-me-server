@@ -11,6 +11,9 @@ const port = process.env.PORT || 8181;
 app.use(cors());
 app.use(bodyParser.json());
 
+const room1 = [];
+const room2 = [];
+
 app.get('/', function (req, res) {
     res.send('Hello world!');
 });
@@ -52,21 +55,67 @@ http.listen(port, () => {
 
 const io = require('socket.io')(http);
 io.on('connection', (socket) => {
-    console.log('User connected.');
+    let roomId;
+    let userId;
     socket.emit('connected', {});
 
     socket.on('message', (message) => {
         console.log('User sent a message: ' + message);
-        
         io.emit('message', message);
     });
 
-    socket.on('code_change', (message) => {
-        // Send code changes to all other users.
-        socket.broadcast.emit('code_change', message);
+    socket.on('room', (data) => {
+        roomId = data.roomId;
+        userId = data.userId;
+        socket.join(roomId);
+
+        addToRoom(roomId, userId);
+
+        const length = roomId === 1 ? room1.length : room2.length;
+        io.to(roomId).emit('user_connected', { total_users: length });
+    });
+
+    socket.on('code_change', (data) => {
+        // Send code changes to specific room.
+        const editorId = data.editorId;
+        io.to(roomId).emit('code_change', { code: data.code, editorId: editorId });
     });
 
     socket.on('disconnect', () => {
         console.log('User disconnected.')
+        removeFromRoom(roomId, userId);
+
+        const length = roomId === 1 ? room1.length : room2.length;
+        io.to(roomId).emit('user_connected', { total_users: length });
     });
 });
+
+const addToRoom = (roomId, userId) => {
+    switch(roomId) {
+    case 1:
+        room1.push(userId);
+        break;
+    case 2:
+        room2.push(userId);
+        break;
+    default:
+        break;
+    }
+
+    return;
+}
+
+const removeFromRoom = (roomId, userId) => {
+    switch(roomId) {
+    case 1:
+        room1.pop();
+        break;
+    case 2:
+        room2.pop();
+        break;
+    default:
+        break;
+    }
+    
+    return;
+}
