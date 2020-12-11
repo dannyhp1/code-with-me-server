@@ -69,16 +69,19 @@ io.on('connection', (socket) => {
 
         addToRoom(roomId, userId);
         const length = roomId === 1 ? room1.length : room2.length;
+
+        // Emit to all users that a new user connected.
         io.emit('user_connected', { roomId: roomId, total_users: length });
     });
 
     socket.on('code_change', (data) => {
-        // Send code changes to specific room.
+        // Send code changes to specific room only to other users.
         const editorId = data.editorId;
         socket.broadcast.emit('code_change', { code: data.code, editorId: editorId, roomId: roomId });
     });
 
     socket.on('execute_code', (data) => {
+        // Execute code and send results to everyone.
         const editorId = data.editorId;
 
         if (data.code === undefined || data.code === '') {
