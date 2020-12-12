@@ -45,7 +45,7 @@ app.post('/execute', function (req, res) {
     }).then(response => {
         res.send(response.data);
     }).catch(error => {
-        res.send({ 'success': false, 'error_message': 'The monkey factory is currently onf ire. No code is being executed properly.' });
+        res.send({ 'success': false, 'error_message': 'The monkey factory is currently on fire. No code is being executed properly.' });
     });
 });
 
