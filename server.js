@@ -89,7 +89,9 @@ io.on('connection', (socket) => {
             io.emit('execute_code', { roomId: roomId, userId: userId, editorId: editorId, 'success': false, 'error_message': 'No code was provided... our monkey has nothing to work with...' });
         }
     
-        axios.post('http://127.0.0.1:8282/v1/execute', {
+        // If this is on AWS, change host to: http://127.0.0.1:8282/v1/execute since flask server will be ran locally.
+        EXECUTE_ENDPOINT = 'https://code-with-me-executor-phamdann.herokuapp.com/v1/execute'
+        axios.post(EXECUTE_ENDPOINT, {
             code: data.code
         }).then(response => {
             io.emit('execute_code', { ...response.data, roomId: roomId, userId: userId, editorId: editorId });
